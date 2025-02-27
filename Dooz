@@ -1,0 +1,117 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Main {
+
+    private static char[][] board={{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
+
+    public static void printBoard(){
+        System.out.println("+---+---+---+");
+        for (int i=0; i<3; i++){
+            System.out.print("| ");
+            for (int j=0; j<3; j++){
+                System.out.print(board[i][j]+" | ");
+            }
+            System.out.println("\n+---+---+---+");
+        }
+    }
+
+    private static boolean isValidMove(int row, int col){
+        return row>=0 && row<3 && col>=0 && col<3 && board[row][col]==' ';
+    }
+
+    public static void getPlayerMove(char currentPlayer){
+        Scanner scanner=new Scanner(System.in);
+        while (true) {
+            System.out.println(" Player " + currentPlayer);
+            System.out.print(" ROW : ");
+            int row = scanner.nextInt() - 1;
+            System.out.print(" COL : ");
+            int col = scanner.nextInt() - 1;
+
+            if (isValidMove(row, col)) {
+                board[row][col] = currentPlayer;
+                break;
+            } else {
+                System.out.println(" Invalid move! Try again =)");
+            }
+        }
+    }
+
+    public static void getComputerMove(char computerChar){
+        Random random=new Random();
+        int row,col;
+        boolean x=true;
+        while (x){
+            row=random.nextInt(3);
+            col=random.nextInt(3);
+            if (isValidMove(row,col)){
+                board[row][col]=computerChar;
+                x=false;
+            }
+        }
+    }
+
+    public static boolean checkWin() {
+        for (int i = 0; i < 3; i++) {
+            if ((board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ') || (board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[i][0]!=' '))
+                return true;
+        }
+        if ((board[0][0]==board[1][1] && board[1][1]==board[2][2] && board[1][1]!=' ') || (board[0][2]==board[1][1] && board[1][1]==board[2][0] && board[1][1]!=' '))
+            return true;
+        return false;
+    }
+
+    public static boolean isBoardFull(){
+        for (int i=0; i<3; i++)
+            for (int j=0; j<3; j++)
+                if (board[i][j]==' ')
+                    return false;
+        return true;
+    }
+
+    public static char gameChar(){
+        Scanner scanner=new Scanner(System.in);
+        char currentPlayer;
+
+        System.out.println(" 1 : X\n 2 : O");
+        System.out.print(" 1 or 2 ? ");
+        while (true){
+            int choose=scanner.nextInt();
+            if (choose==1){
+                currentPlayer='x';
+                break;
+            }
+            else if (choose==2){
+                currentPlayer='o';
+                break;
+            }
+            else
+                System.out.print(" Enter between (1_2) : ");
+        }
+        return currentPlayer;
+    }
+
+    public static void main(String[] args) {
+
+        char currentPlayer , computerChar;
+        boolean gameRunning = true;
+        currentPlayer=gameChar();
+        computerChar=(currentPlayer=='x')?'o':'x';
+
+        while (gameRunning) {
+            printBoard();
+            getPlayerMove(currentPlayer);
+            getComputerMove(computerChar);
+
+            if (checkWin()) {
+                printBoard();
+                System.out.println("YOU WIN =0");
+                gameRunning = false;
+            } else if (isBoardFull()) {
+                System.out.println("Mosavi =/");
+                gameRunning = false;
+            }
+        }
+    }
+}
