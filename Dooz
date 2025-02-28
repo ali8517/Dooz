@@ -41,20 +41,116 @@ public class Main {
     public static void getComputerMove(char computerChar){
         Random random=new Random();
         int row,col;
-        boolean x=true;
-        while (x){
-            row=random.nextInt(3);
-            col=random.nextInt(3);
-            if (isValidMove(row,col)){
-                board[row][col]=computerChar;
-                x=false;
+        if (board[0][0]==board[1][1]){
+            if (isValidMove(2,2))
+                board[2][2]=computerChar;
+        }
+        else if (board[0][0]==board[2][2]){
+            if (isValidMove(1,1))
+                board[1][1]=computerChar;
+        }
+        else if (board[1][1]==board[2][2]){
+            if (isValidMove(0,0))
+                board[0][0]=computerChar;
+        }
+        else if (board[0][2]==board[1][1]){
+            if (isValidMove(2,0))
+                board[2][0]=computerChar;
+        }
+        else if (board[0][2]==board[2][0]){
+            if (isValidMove(1,1))
+                board[1][1]=computerChar;
+        }
+        else if (board[2][0]==board[1][1]){
+            if (isValidMove(0,2))
+                board[0][2]=computerChar;
+        }
+        else if (board[0][0]==board[0][1]){
+            if (isValidMove(0,2))
+                board[0][2]=computerChar;
+        }
+        else if (board[0][0]==board[0][2]){
+            if (isValidMove(0,1))
+                board[0][1]=computerChar;
+        }
+        else if (board[0][1]==board[0][2]){
+            if (isValidMove(0,0))
+                board[0][0]=computerChar;
+        }
+        else if (board[1][0]==board[1][1]){
+            if (isValidMove(1,2))
+                board[1][2]=computerChar;
+        }
+        else if (board[1][0]==board[1][2]){
+            if (isValidMove(1,1))
+                board[1][1]=computerChar;
+        }
+        else if (board[1][1]==board[1][2]){
+            if (isValidMove(1,0))
+                board[1][0]=computerChar;
+        }
+        else if (board[2][0]==board[2][1]){
+            if (isValidMove(2,2))
+                board[2][2]=computerChar;
+        }
+        else if (board[2][0]==board[2][2]){
+            if (isValidMove(2,1))
+                board[2][1]=computerChar;
+        }
+        else if (board[2][1]==board[2][2]){
+            if (isValidMove(2,0))
+                board[2][0]=computerChar;
+        }else if (board[0][0]==board[1][0]){
+            if (isValidMove(2,0))
+                board[2][0]=computerChar;
+        }
+        else if (board[0][0]==board[2][0]){
+            if (isValidMove(1,0))
+                board[1][0]=computerChar;
+        }
+        else if (board[1][0]==board[2][0]){
+            if (isValidMove(0,0))
+                board[0][0]=computerChar;
+        }
+        else if (board[0][1]==board[1][1]){
+            if (isValidMove(2,1))
+                board[2][1]=computerChar;
+        }
+        else if (board[0][1]==board[2][1]){
+            if (isValidMove(1,1))
+                board[1][1]=computerChar;
+        }
+        else if (board[1][1]==board[2][1]){
+            if (isValidMove(0,1))
+                board[0][1]=computerChar;
+        }
+        else if (board[0][2]==board[1][2]){
+            if (isValidMove(2,2))
+                board[2][2]=computerChar;
+        }
+        else if (board[0][2]==board[2][2]){
+            if (isValidMove(1,2))
+                board[1][2]=computerChar;
+        }
+        else if (board[1][2]==board[2][2]){
+            if (isValidMove(0,2))
+                board[0][2]=computerChar;
+        }
+        else {
+            while (true) {
+                row = random.nextInt(3);
+                col = random.nextInt(3);
+                if (isValidMove(row, col)) {
+                    board[row][col] = computerChar;
+                    break;
+                }
             }
         }
     }
 
     public static boolean checkWin() {
         for (int i = 0; i < 3; i++) {
-            if ((board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ') || (board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[i][0]!=' '))
+            if ((board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ') || (board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[0][i]!=' '))
                 return true;
         }
         if ((board[0][0]==board[1][1] && board[1][1]==board[2][2] && board[1][1]!=' ') || (board[0][2]==board[1][1] && board[1][1]==board[2][0] && board[1][1]!=' '))
@@ -70,8 +166,8 @@ public class Main {
         return true;
     }
 
-    public static char gameChar(){
-        Scanner scanner=new Scanner(System.in);
+    public static char gameChar(Scanner scanner){
+
         char currentPlayer;
 
         System.out.println(" 1 : X\n 2 : O");
@@ -79,11 +175,11 @@ public class Main {
         while (true){
             int choose=scanner.nextInt();
             if (choose==1){
-                currentPlayer='x';
+                currentPlayer='X';
                 break;
             }
             else if (choose==2){
-                currentPlayer='o';
+                currentPlayer='O';
                 break;
             }
             else
@@ -93,23 +189,35 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
+        Scanner scanner=new Scanner(System.in);
         char currentPlayer , computerChar;
         boolean gameRunning = true;
-        currentPlayer=gameChar();
-        computerChar=(currentPlayer=='x')?'o':'x';
+        currentPlayer=gameChar(scanner);
+        computerChar=(currentPlayer=='X')?'O':'X';
 
         while (gameRunning) {
             printBoard();
             getPlayerMove(currentPlayer);
+
+            if (checkWin()){
+                printBoard();
+                System.out.println("YOU WIN =0");
+                break;
+            }
+
+            if (isBoardFull()) {
+                System.out.println("Draw =/");
+                gameRunning = false;
+            }
+
             getComputerMove(computerChar);
 
             if (checkWin()) {
                 printBoard();
-                System.out.println("YOU WIN =0");
+                System.out.println("COMPUTER WIN =(");
                 gameRunning = false;
             } else if (isBoardFull()) {
-                System.out.println("Mosavi =/");
+                System.out.println("Draw =/");
                 gameRunning = false;
             }
         }
